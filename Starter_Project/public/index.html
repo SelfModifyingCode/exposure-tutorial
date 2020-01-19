@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Exposure Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <style>
+    body {
+	    background-color : #F2F2F2;
+    }
+
+    code {
+	    background-color : #FFF0F5;
+	    border-color     : #FF9494;
+	    padding          : 10px 5px;
+	    display          : flex;
+	    flex-wrap        : wrap;
+	    align-content    : center;
+	    letter-spacing   : 2px;
+    }
+
+    .loader {
+	    border        : 4px solid #F3F3F3; /* Light grey */
+	    border-top    : 4px solid #3498DB; /* Blue */
+	    border-radius : 50%;
+	    width         : 32px;
+	    height        : 32px;
+	    animation     : spin 0.25s linear infinite;
+    }
+
+    @keyframes spin {
+	    0% {
+		    transform : rotate(0deg);
+	    }
+	    100% {
+		    transform : rotate(360deg);
+	    }
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row mt-4 pb-2">
+		<div class="col text-center">
+			<h1>This is my page.</h1>
+			<p>There are many like it, but this one is mine.</p>
+		</div>
+	</div>
+	<div class="row mx-5 p-3 border bg-white">
+		<div class="col-8">
+			<h6>Here you can create a new code!</h6>
+			<div class="row">
+				<div class="col">
+					<button id="btn_code" type="button" class="btn btn-info">Generate Code</button>
+				</div>
+				<div class="col"><code id="code_area">Click the button to begin</code></div>
+			</div>
+			<hr />
+			<h6>Or do a bit of searching.</h6>
+			<input type="text" class="form-control" id="input_query" placeholder="Enter your search" name="query">
+			<button id="btn_search" type="button" class="btn btn-success mt-1">Search</button>
+			<hr />
+			<p id="search_results_area"></p>
+		</div>
+		<div class="col-4">
+			<h5>Fake Login</h5>
+			<form action="#" class="needs-validation" novalidate>
+				<div class="form-group">
+					<label for="uname">Username:</label>
+					<input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+                  <div class="valid-feedback">Valid.</div>
+                  <div class="invalid-feedback">Please fill out this field.</div>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Password:</label>
+					<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+					<div class="valid-feedback">Valid.</div>
+					<div class="invalid-feedback">Please fill out this field.</div>
+				</div>
+				<div class="form-group form-check">
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="remember" required> I agree to like, subscribe and obey.
+						<div class="valid-feedback">Valid.</div>
+						<div class="invalid-feedback">Check this checkbox to continue.</div>
+					</label>
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="assets/js/utilities.js"></script>
+<script src="assets/js/validate_form.js"></script>
+<script src="assets/js/Lookup.js"></script>
+
+<script>
+  let search = new Lookup({url: 'my/api/link/here/or/whatever'});
+  let search_area = $("#search_results_area");
+  let search_box = $("#input_query");
+
+  $().ready(function () {
+	  $("#btn_code").on('click', function () {
+		  $("#code_area").text(uniqueID());
+	  });
+
+	  search.changeAPI('oh/this/is/better/');
+	  search.subscribe(showResults);
+
+  });
+
+  $("#btn_search").on('click', function () {
+	  search.search(search_box.val());
+	  search_area.empty();
+	  search_area.append('<div class="loader"></div>');
+  });
+
+  function showResults(results) {
+	  // Remove old content.
+	  search_area.empty();
+	  // Add Header section
+	  search_area.append("<b>Search Results</b>");
+	  search_area.append("<br/>");
+	  // Load results, which is just some pre-formatted text
+	  search_area.append(results);
+  }
+
+</script>
+
+</body>
+</html>
